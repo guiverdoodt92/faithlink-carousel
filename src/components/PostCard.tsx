@@ -3,17 +3,33 @@ import { Card } from "./ui/card";
 import { Button } from "./ui/button";
 import { Heart, MessageCircle, Share2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { likePost } from "@/lib/supabase";
+import { useToast } from "@/hooks/use-toast";
+import type { Post } from "@/types/database";
 
-interface PostCardProps {
-  author: string;
-  content: string;
-  images?: string[];
-  timestamp: string;
-}
-
-export const PostCard = ({ author, content, images, timestamp }: PostCardProps) => {
+export const PostCard = ({ id, author, content, images, timestamp, likes: initialLikes }: Post) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [liked, setLiked] = useState(false);
+  const [likes, setLikes] = useState(initialLikes);
+  const { toast } = useToast();
+
+  const handleLike = async () => {
+    if (liked) return;
+    
+    try {
+      await likePost(id, likes);
+      setLikes(prev => prev + 1);
+      setLiked(true);
+      toast({
+        description: "Post liked successfully!",
+      });
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        description: "Failed to like post. Please try again.",
+      });
+    }
+  };
 
   const nextSlide = () => {
     if (images && currentSlide < images.length - 1) {
@@ -86,10 +102,10 @@ export const PostCard = ({ author, content, images, timestamp }: PostCardProps) 
               "hover:text-rose-600 transition-colors",
               liked && "text-rose-600"
             )}
-            onClick={() => setLiked(!liked)}
+            onClick={handleLike}
           >
             <Heart className="w-5 h-5 mr-1" />
-            <span>Like</span>
+            <span>{likes} Likes</span>
           </Button>
           <Button variant="ghost" size="sm">
             <MessageCircle className="w-5 h-5 mr-1" />

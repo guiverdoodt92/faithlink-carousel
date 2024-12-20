@@ -1,32 +1,37 @@
+import { useQuery } from "@tanstack/react-query";
 import { PostCard } from "./PostCard";
-
-const MOCK_POSTS = [
-  {
-    id: 1,
-    author: "Pastor John",
-    content: "Faith is not about everything turning out okay. Faith is about being okay no matter how things turn out.",
-    timestamp: "2 hours ago",
-    images: ["/placeholder.svg"]
-  },
-  {
-    id: 2,
-    author: "Sarah M.",
-    content: "Today's devotional reminder: 'Be still, and know that I am God.' - Psalm 46:10",
-    timestamp: "4 hours ago",
-    images: ["/placeholder.svg", "/placeholder.svg"]
-  },
-  {
-    id: 3,
-    author: "Ministry Team",
-    content: "Join us this Sunday for a special service on finding peace in troubled times.",
-    timestamp: "6 hours ago"
-  }
-];
+import { fetchPosts } from "@/lib/supabase";
+import { Post } from "@/types/database";
 
 export const Timeline = () => {
+  const { data: posts, isLoading, error } = useQuery({
+    queryKey: ['posts'],
+    queryFn: fetchPosts
+  });
+
+  if (isLoading) {
+    return (
+      <div className="max-w-3xl mx-auto px-4 py-6 space-y-6">
+        <div className="animate-pulse space-y-6">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="h-64 bg-gray-200 rounded-lg" />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="max-w-3xl mx-auto px-4 py-6 text-center text-red-500">
+        Error loading posts. Please try again later.
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-3xl mx-auto px-4 py-6 space-y-6">
-      {MOCK_POSTS.map((post) => (
+      {posts?.map((post: Post) => (
         <PostCard key={post.id} {...post} />
       ))}
     </div>
