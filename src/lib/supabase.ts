@@ -5,7 +5,17 @@ import type { Post } from '@/types/database';
 const supabaseUrl = 'https://rlxqmjsqjvxbfvvhvvvr.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJseHFtanNxanZ4YmZ2dmh2dnZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDk2NTI2NzAsImV4cCI6MjAyNTIyODY3MH0.Hs_Kq_4rz8e5WRUvZE6ckjtqXIzx4JCZCkR_oqkPrYY';
 
-export const supabase = createClient(supabaseUrl, supabaseKey);
+export const supabase = createClient(supabaseUrl, supabaseKey, {
+  auth: {
+    persistSession: false
+  },
+  global: {
+    headers: {
+      'apikey': supabaseKey,
+      'Authorization': `Bearer ${supabaseKey}`
+    }
+  }
+});
 
 export async function fetchPosts() {
   try {
