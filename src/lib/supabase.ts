@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import type { Post } from '@/types/database';
 
 // Get the URL and anon key from your Supabase project settings
 const supabaseUrl = 'https://rlxqmjsqjvxbfvvhvvvr.supabase.co';
@@ -7,20 +8,34 @@ const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 export const supabase = createClient(supabaseUrl, supabaseKey);
 
 export async function fetchPosts() {
-  const { data, error } = await supabase
-    .from('posts')
-    .select('*')
-    .order('timestamp', { ascending: false });
+  try {
+    const { data, error } = await supabase
+      .from('posts')
+      .select('*')
+      .order('timestamp', { ascending: false });
 
-  if (error) throw error;
-  return data;
+    if (error) {
+      console.error('Error fetching posts:', error);
+      return [];
+    }
+
+    return data || [];
+  } catch (error) {
+    console.error('Error in fetchPosts:', error);
+    return [];
+  }
 }
 
 export async function likePost(postId: string, currentLikes: number) {
-  const { error } = await supabase
-    .from('posts')
-    .update({ likes: currentLikes + 1 })
-    .eq('id', postId);
+  try {
+    const { error } = await supabase
+      .from('posts')
+      .update({ likes: currentLikes + 1 })
+      .eq('id', postId);
 
-  if (error) throw error;
+    if (error) throw error;
+  } catch (error) {
+    console.error('Error in likePost:', error);
+    throw error;
+  }
 }
