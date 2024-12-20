@@ -2,9 +2,14 @@ import { createClient } from '@supabase/supabase-js';
 import type { Post } from '@/types/database';
 
 const supabaseUrl = 'https://rukeqkqpdplastrgvtdx.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ1a2Vxa3FwZHBsYXN0cmd2dGR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQ3MjkyOTcsImV4cCI6MjAyNTIyODY3MH0.2WYRB_4IMqenJrwbk2KCf_mI9kymaKj8gvhhnGqMCwY';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ1a2Vxa3FwZHBsYXN0cmd2dGR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQ3MjkyOTcsImV4cCI6MjA1MDMwNTI5N30.2WYRB_4IMqenJrwbk2KCf_mI9kymaKj8gvhhnGqMCwY';
 
-export const supabase = createClient(supabaseUrl, supabaseKey);
+export const supabase = createClient(supabaseUrl, supabaseKey, {
+  auth: {
+    persistSession: true,
+    autoRefreshToken: true
+  }
+});
 
 export async function fetchPosts() {
   try {
