@@ -44,7 +44,12 @@ export type Database = {
           avatar_url: string | null
           bio: string | null
           created_at: string | null
+          facebook_handle: string | null
+          full_name: string | null
           id: string
+          instagram_handle: string | null
+          phone_number: string | null
+          phone_region: string | null
           updated_at: string | null
           username: string | null
         }
@@ -52,7 +57,12 @@ export type Database = {
           avatar_url?: string | null
           bio?: string | null
           created_at?: string | null
+          facebook_handle?: string | null
+          full_name?: string | null
           id: string
+          instagram_handle?: string | null
+          phone_number?: string | null
+          phone_region?: string | null
           updated_at?: string | null
           username?: string | null
         }
@@ -60,7 +70,12 @@ export type Database = {
           avatar_url?: string | null
           bio?: string | null
           created_at?: string | null
+          facebook_handle?: string | null
+          full_name?: string | null
           id?: string
+          instagram_handle?: string | null
+          phone_number?: string | null
+          phone_region?: string | null
           updated_at?: string | null
           username?: string | null
         }
