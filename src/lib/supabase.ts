@@ -43,3 +43,23 @@ export async function likePost(postId: string, currentLikes: number) {
     throw error;
   }
 }
+
+export async function createPost(content: string, images?: string[]) {
+  const user = await supabase.auth.getUser();
+  if (!user.data.user) throw new Error('User not authenticated');
+
+  try {
+    const { error } = await supabase
+      .from('posts')
+      .insert({
+        author: user.data.user.id,
+        content,
+        images,
+      });
+
+    if (error) throw error;
+  } catch (error) {
+    console.error('Error in createPost:', error);
+    throw error;
+  }
+}
