@@ -8,8 +8,14 @@ const Login = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
+        navigate("/");
+      }
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_IN") {
         navigate("/");
       }
     });
@@ -42,6 +48,7 @@ const Login = () => {
           }}
           providers={["google"]}
           redirectTo={window.location.origin}
+          onlyThirdPartyProviders
         />
       </div>
     </div>
