@@ -6,6 +6,7 @@ import { useEffect } from "react";
 
 const Login = () => {
   const navigate = useNavigate();
+  const origin = window.location.origin;
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
@@ -41,7 +42,8 @@ const Login = () => {
             }
           }}
           providers={["google"]}
-          redirectTo={window.location.origin}
+          redirectTo={origin}
+          onlyThirdPartyProviders={true}
         />
       </div>
     </div>
