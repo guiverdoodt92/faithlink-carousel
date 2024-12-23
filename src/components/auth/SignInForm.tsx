@@ -4,8 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 export const SignInForm = ({ onToggle }: { onToggle: () => void }) => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -31,6 +33,7 @@ export const SignInForm = ({ onToggle }: { onToggle: () => void }) => {
 
       if (data.user) {
         toast.success("Logged in successfully!");
+        navigate("/");
       }
     } catch (error: any) {
       toast.error(error.message);
